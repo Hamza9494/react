@@ -10,7 +10,7 @@ const Pagination = ({ links }) => {
           key={link.label}
           className={
             "inline-block py-2 px-3 rounded-lg text-gray-600 text-xs " +
-            (link.active ? "bg-red-700 " : " ") +
+            (link.active ? "bg-red-700 text-white " : " ") +
             (!link.url
               ? "!text-gray-400 cursor-not-allowed "
               : "hover:text-yellow-600")

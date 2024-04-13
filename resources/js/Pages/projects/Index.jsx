@@ -1,9 +1,28 @@
 import Pagination from "@/Components/Pagination";
+import SelectInput from "@/Components/SelectInput";
+import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { PROJECT_STATUS_TEXT_MAP } from "@/constant";
-import { Head, Link } from "@inertiajs/react";
+import {
+  PROJECT_STATUS_CLASS_MAP,
+  PROJECT_STATUS_TEXT_MAP,
+} from "@/constant.jsx";
+import { Head, Link, router } from "@inertiajs/react";
 
-const Projects = ({ auth, projects }) => {
+const Index = ({ auth, projects, queryParams = null }) => {
+  const params = queryParams || {};
+  const searchFieldChanged = (name, value) => {
+    if (value) {
+      params[name] = value;
+    } else {
+      delete params[name];
+    }
+    router.get(route("projects.index", params));
+  };
+
+  const onKeyPress = (name, e) => {
+    if (e.key !== "Enter") return;
+    searchFieldChanged(name, e.target.value);
+  };
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -32,6 +51,42 @@ const Projects = ({ auth, projects }) => {
                     <th className="py-3 px-2 text-right">Actions</th>
                   </tr>
                 </thead>
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
+                  <tr className="text-nowrap">
+                    <th className="py-3 px-2"> </th>
+                    <th className="py-3 px-2"> </th>
+                    <th className="py-3 px-2">
+                      <TextInput
+                        defaultValue={params.name}
+                        className="w-full"
+                        placeholder="Project Name"
+                        onBlur={(e) =>
+                          searchFieldChanged("name", e.target.value)
+                        }
+                        onKeyPress={(e) => onKeyPress("name", e)}
+                      />
+                    </th>
+                    <th className="py-3 px-2">
+                      <SelectInput
+                        defaultValue={params.status}
+                        className="w-full"
+                        onChange={(e) =>
+                          searchFieldChanged("status", e.target.value)
+                        }
+                      >
+                        <option value="">Select Status</option>
+                        <option value="pending">Pending </option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                      </SelectInput>
+                    </th>
+                    <th className="py-3 px-2"> </th>
+                    <th className="py-3 px-2"> </th>
+                    <th className="py-3 px-2"> </th>
+                    <th className="py-3 px-2 text-right"> </th>
+                  </tr>
+                </thead>
+
                 <tbody>
                   {projects.data.map((project) => (
                     <tr
@@ -44,7 +99,14 @@ const Projects = ({ auth, projects }) => {
                       </td>
                       <td className="px-2 py-3">{project.name}</td>
                       <td className="px-2 py-3">
-                        {PROJECT_STATUS_TEXT_MAP[project.status]}
+                        <span
+                          className={
+                            "px-1 py-2 rounded text-white " +
+                            PROJECT_STATUS_CLASS_MAP[project.status]
+                          }
+                        >
+                          {PROJECT_STATUS_TEXT_MAP[project.status]}
+                        </span>
                       </td>
                       <td className="px-2 py-3">{project.created_at}</td>
                       <td className="px-2 py-3 text-nowrap">
@@ -80,4 +142,4 @@ const Projects = ({ auth, projects }) => {
   );
 };
 
-export default Projects;
+export default Index;
