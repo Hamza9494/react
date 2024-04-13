@@ -10,6 +10,8 @@ import { Head, Link, router } from "@inertiajs/react";
 
 const Index = ({ auth, projects, queryParams = null }) => {
   const params = queryParams || {};
+  console.log(params);
+
   const searchFieldChanged = (name, value) => {
     if (value) {
       params[name] = value;
@@ -23,6 +25,21 @@ const Index = ({ auth, projects, queryParams = null }) => {
     if (e.key !== "Enter") return;
     searchFieldChanged(name, e.target.value);
   };
+
+  const sortChanged = (name) => {
+    if (name === params.sort_field) {
+      if (params.sort_direction === "asc") {
+        params.sort_direction = "desc";
+      } else {
+        params.sort_direction = "asc";
+      }
+    } else {
+      params.sort_field = name;
+      params.sort_direction = "asc";
+    }
+    router.get(route("projects.index", params));
+  };
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -41,12 +58,37 @@ const Index = ({ auth, projects, queryParams = null }) => {
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                   <tr className="text-nowrap">
-                    <th className="py-3 px-2">ID</th>
+                    <th
+                      className="py-3 px-2"
+                      onClick={(e) => sortChanged("id")}
+                    >
+                      ID
+                    </th>
                     <th className="py-3 px-2">Image</th>
-                    <th className="py-3 px-2">Name</th>
-                    <th className="py-3 px-2">Status</th>
-                    <th className="py-3 px-2">Create Date</th>
-                    <th className="py-3 px-2">Due Date</th>
+                    <th
+                      className="py-3 px-2"
+                      onClick={(e) => sortChanged("name")}
+                    >
+                      Name
+                    </th>
+                    <th
+                      className="py-3 px-2"
+                      onClick={(e) => sortChanged("status")}
+                    >
+                      Status
+                    </th>
+                    <th
+                      className="py-3 px-2"
+                      onClick={(e) => sortChanged("created_at")}
+                    >
+                      Create Date
+                    </th>
+                    <th
+                      className="py-3 px-2"
+                      onClick={(e) => sortChanged("due_date")}
+                    >
+                      Due Date
+                    </th>
                     <th className="py-3 px-2">Created by</th>
                     <th className="py-3 px-2 text-right">Actions</th>
                   </tr>

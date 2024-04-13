@@ -16,6 +16,9 @@ class ProjectController extends Controller
     {
 
         $query = Project::query();
+
+        $sort_field = request('sort_field', 'created_at');
+        $sort_direction = request('sort_direction', 'desc');
         if (request('name')) {
             $query->where('name', 'like', '%' .  request('name') . '%');
         }
@@ -23,7 +26,7 @@ class ProjectController extends Controller
             $query->where('status', request('status'));
         }
 
-        $projects =   $query->paginate(10)->onEachSide(3);
+        $projects = $query->orderBy($sort_field, $sort_direction)->paginate(10)->onEachSide(3);
         return inertia('projects/Index', [
             'projects' => ProjectResource::collection($projects),
             'queryParams' => request()->query() ? request()->query() : null
