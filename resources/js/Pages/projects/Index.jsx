@@ -156,7 +156,12 @@ const Index = ({ auth, projects, queryParams = null }) => {
                         <td className="px-2 py-3">
                           <img src={project.image_path} style={{ width: 60 }} />
                         </td>
-                        <td className="px-2 py-3">{project.name}</td>
+                        <td className="px-2 py-3 hover:underline">
+                          {" "}
+                          <Link href={route("projects.show", project.id)}>
+                            {project.name}
+                          </Link>{" "}
+                        </td>
                         <td className="px-2 py-3">
                           <span
                             className={
