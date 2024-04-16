@@ -2,8 +2,8 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constant";
 import { Head } from "@inertiajs/react";
 
-const Show = ({ project, auth }) => {
-  console.log(project);
+const Show = ({ project, auth, tasks }) => {
+  console.log(tasks);
   return (
     <AuthenticatedLayout
       user={auth.user}

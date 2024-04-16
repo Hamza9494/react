@@ -10,10 +10,10 @@ class Project extends Model
 {
     use HasFactory;
 
-    // public function tasks()
-    // {
-    //     return $this->hasMany(Task::class, 'project_id');
-    // }
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'project_id');
+    }
 
     public function createdBy()
     {
